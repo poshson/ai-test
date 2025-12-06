@@ -1,0 +1,30 @@
+name: Deploy to Kintone
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Deploy files to Kintone
+        run: |
+          node ./scripts/deploy-to-kintone.js
+        env:
+          KINTONE_DOMAIN: ${{ secrets.KINTONE_DOMAIN }}
+          KINTONE_API_TOKEN: ${{ secrets.KINTONE_API_TOKEN }}
+          KINTONE_APP_ID: ${{ secrets.KINTONE_APP_ID }}
